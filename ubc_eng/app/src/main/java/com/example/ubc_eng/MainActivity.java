@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                                     stringBuilder.append("\n");
                                 }
                                 text_displayed = stringBuilder.toString();
-                                textView.setText(text_displayed);
+                                textView.setText(stringBuilder.toString());
                             }
                         });
                     }

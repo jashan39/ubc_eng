@@ -26,7 +26,7 @@
         android:maxLines="18"
         android:scrollbars="vertical"
         android:layout_marginTop="20dp"
-        android:text="TextView"
+        android:text=""
         android:layout_below="@+id/textView2"
         android:layout_centerHorizontal="true" />
 
