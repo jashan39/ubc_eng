@@ -1,6 +1,7 @@
 package com.example.ubc_eng;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
@@ -27,11 +28,13 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String EXTRA_MESSAGE = "";
+
     SurfaceView cameraView;
     TextView textView;
     CameraSource cameraSource;
     TextToSpeech t1;
-    Button b1;
+    String text_displayed = "";
     final int RequestCameraPermissionID = 1001;
 
     @Override
@@ -61,28 +64,8 @@ public class MainActivity extends AppCompatActivity {
 
         cameraView = (SurfaceView) findViewById(R.id.surface_view);
         textView = (TextView) findViewById(R.id.text_view);
-        b1=(Button)findViewById(R.id.button2);
 
-
-        t1=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if(status != TextToSpeech.ERROR) {
-                    t1.setLanguage(Locale.UK);
-                }
-            }
-        });
-
-        b1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String toSpeak = "I am working team intelligence! Wink Wink";
-                Toast.makeText(getApplicationContext(), toSpeak, Toast.LENGTH_SHORT).show();
-                t1.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
-            }
-        });
-
-        TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
+        final TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
         if (!textRecognizer.isOperational()) {
             Log.w("MainActivity", "Detector dependencies are not yet available");
         } else {
@@ -144,7 +127,8 @@ public class MainActivity extends AppCompatActivity {
                                     stringBuilder.append(item.getValue());
                                     stringBuilder.append("\n");
                                 }
-                                textView.setText(stringBuilder.toString());
+                                text_displayed = stringBuilder.toString();
+                                textView.setText(text_displayed);
                             }
                         });
                     }
@@ -153,6 +137,23 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void startMain(View view){
+
+        t1=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != TextToSpeech.ERROR) {
+                    t1.setLanguage(Locale.UK);
+                }
+            }
+        });
+
+        t1.speak("Speak", TextToSpeech.QUEUE_FLUSH, null);
+
+        Intent intent = new Intent(this, Main2Activity.class);
+        intent.putExtra(EXTRA_MESSAGE, text_displayed);
+        startActivity(intent);
+    }
 
     public void onPause(){
         if(t1 !=null){
