@@ -138,18 +138,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startMain(View view){
-
-        t1=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if(status != TextToSpeech.ERROR) {
-                    t1.setLanguage(Locale.UK);
-                }
-            }
-        });
-
-        t1.speak("Speak", TextToSpeech.QUEUE_FLUSH, null);
-
         Intent intent = new Intent(this, Main2Activity.class);
         intent.putExtra(EXTRA_MESSAGE, text_displayed);
         startActivity(intent);
