@@ -2,15 +2,21 @@ package com.example.ubc_eng;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
+import java.util.Locale;
+import android.view.View;
+
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -24,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     SurfaceView cameraView;
     TextView textView;
     CameraSource cameraSource;
+    TextToSpeech t1;
+    Button b1;
     final int RequestCameraPermissionID = 1001;
 
     @Override
@@ -53,6 +61,26 @@ public class MainActivity extends AppCompatActivity {
 
         cameraView = (SurfaceView) findViewById(R.id.surface_view);
         textView = (TextView) findViewById(R.id.text_view);
+        b1=(Button)findViewById(R.id.button2);
+
+
+        t1=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != TextToSpeech.ERROR) {
+                    t1.setLanguage(Locale.UK);
+                }
+            }
+        });
+
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String toSpeak = "I am working team intelligence! Wink Wink";
+                Toast.makeText(getApplicationContext(), toSpeak, Toast.LENGTH_SHORT).show();
+                t1.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
+            }
+        });
 
         TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
         if (!textRecognizer.isOperational()) {
@@ -124,4 +152,14 @@ public class MainActivity extends AppCompatActivity {
             });
         }
     }
+
+
+    public void onPause(){
+        if(t1 !=null){
+            t1.stop();
+            t1.shutdown();
+        }
+        super.onPause();
+    }
+
 }
